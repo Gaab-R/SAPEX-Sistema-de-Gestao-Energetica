@@ -8,6 +8,8 @@ import threading
 import mysql.connector
 from transformers import pipeline
 
+gerador_ia = pipeline('text-generation', model='gpt2')
+
 # Configuração MySQL
 try:
     db = mysql.connector.connect(
@@ -114,7 +116,7 @@ def analisar_com_ia(dados):
         sugestao = "Nenhum dispositivo seguro para desligar no momento."
     
     try:
-        gerador = pipeline('text-generation', model='gpt2')
+        resultado = gerador_ia('text-generation', model='gpt2')
         prompt = f"Análise: Consumo {dados['consumo_energia']}W, temperatura {dados['temperatura']}°C. Sugira em português qual dispositivo desligar para economizar energia. Responda em 1 frase curta, baseada em: {sugestao}"
         resultado = gerador(prompt, max_length=50, num_return_sequences=1, temperature=0.7, do_sample=True, truncation=True)
         resposta = resultado[0]['generated_text'].replace(prompt, '').strip()
@@ -211,7 +213,7 @@ def index():
                            dispositivos=['lampada', 'tv', 'ar_condicionado'])
 
 def iniciar_flask():
-    app.run(host='0.0.0.0', debug=True, use_reloader=False, port=5000)
+    app.run(host='0.0.0.0', debug=False, use_reloader=False, port=5000)
 
 if __name__ == "__main__":
     flask_thread = threading.Thread(target=iniciar_flask)
