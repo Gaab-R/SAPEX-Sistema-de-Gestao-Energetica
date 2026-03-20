@@ -197,7 +197,8 @@ def index():
     print(f"[DEBUG] Consumo Atual: {consumo_atual}, Valor Janeiro: {valor_janeiro}, Emissões: {emissoes_co2}")
     
     return render_template('index.html', 
-                           ultimo_dado=ultimo_dado, 
+                           ultimo_dado=ultimo_dado,
+                           ultimo_dado_json=json.dumps(ultimo_dado),
                            acao=acao, 
                            analise_ia=analise_ia, 
                            consumo_atual=consumo_atual,
